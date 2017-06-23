@@ -200,7 +200,7 @@ class ATSP:
                         self.control = self.fitness + 1
                     last_best = self.current_cost + 1
                 elif len(self.cost_list) < self.iteration_boundary[0]:
-                    self.fitness = 1
+                    self.fitness = 3
         if self.best_cost > self.INF:
             return sort_order(self.best_solution), 0  # indication that there might be NO solution for the problem
         if self.detailed_info:
