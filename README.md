@@ -29,7 +29,7 @@ edge m is from Um to Vm weighted Wm
 Check the example file: case_101.txt
 
 ---
-### Testing Examples
+### Testing examples
 
 1. TSPLIB input example:
 
