@@ -39,6 +39,7 @@ python tsplib_input.py ft53.atsp
 
 Check ATSP_sol_ft53.txt for the best results I get so far. According to [TSPLIB](http://elib.zib.de/pub/mp-testdata/tsp/tsplib/sop-sol.html) this is the best known solution.
 
+Plotted learning rate:
 ![ft53](http://i.imgur.com/nLlVhPX.png)
 
 _Please note that since simulated annealing is randomized algorithm each run may have different result and the best known solution is not guaranteed._
@@ -67,5 +68,4 @@ Note that regularization_boundary parameter (especially the lower boundary) has 
 
 This is an example that the lower boundary is set too high that each temper seems random without descending:
 
-Plotted learning rate:
 ![Ramdom](http://i.imgur.com/VNP3V3T.png)
