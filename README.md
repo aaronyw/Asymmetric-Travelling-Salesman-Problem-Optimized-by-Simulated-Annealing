@@ -41,6 +41,8 @@ Check ATSP_sol_ft53.txt for the best results I get so far. According to [TSPLIB]
 
 ![ft53](http://i.imgur.com/nLlVhPX.png)
 
+_Please note that since simulated annealing is randomized algorithm each run may have different result and the best known solution is not guaranteed._
+
 2. array input example:
 
 copy all content inside case_101.txt file, than run
