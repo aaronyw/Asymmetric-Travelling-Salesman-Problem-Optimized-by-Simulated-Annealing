@@ -14,16 +14,16 @@ Please note only ATSP type of TSPLIB file can be accepted. Check the example fil
 
 2. as an array contains all edge information:
 
-if there is n nodes and m edges in ATSP graph, this array will be 1 + m*3 long started with n like this *[n, U1, V1, W1, U2, V2, W2, ..., Um, Vm, Wm]* which represents:
+if there is n nodes and m edges in ATSP graph, this array will be 1 + m*3 long started with n like this **_[n, U1, V1, W1, U2, V2, W2, ..., Um, Vm, Wm]_** which represents:
 
 ```
-edge 1 is from *U1* to *V1* weighted *W1*
+edge 1 is from U1 to V1 weighted W1
 
-edge 2 is from *U2* to *V2* weighted *W2*
+edge 2 is from U2 to V2 weighted W2
 
 ...
 
-edge m is from *Um* to *Vm* weighted *Wm*
+edge m is from Um to Vm weighted Wm
 ```
 
 Check the example file: case_101.txt
