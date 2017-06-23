@@ -39,7 +39,7 @@ python tsplib_input.py ft53.atsp
 
 Check ATSP_sol_ft53.txt for the best results I get so far. According to [TSPLIB](http://elib.zib.de/pub/mp-testdata/tsp/tsplib/sop-sol.html) this is the best known solution.
 
-Plotted learning rate:
+Plotted learning rate (red dot represents a temper):
 ![ft53](http://i.imgur.com/nLlVhPX.png)
 
 _Please note that since simulated annealing is randomized algorithm each run may have different result and the best known solution is not guaranteed._
