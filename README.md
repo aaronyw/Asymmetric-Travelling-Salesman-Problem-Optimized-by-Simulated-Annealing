@@ -53,6 +53,7 @@ and paste everything inside the console
 
 Check ATSP_sol_101.txt for the best results I get so far.
 
+Plotted learning rate:
 ![101](http://i.imgur.com/qRFqjAV.png)
 
 ---
@@ -64,4 +65,5 @@ Note that regularization_boundary parameter (especially the lower boundary) has 
 
 This is an example that the lower boundary is set too high that each temper seems random without descending:
 
+Plotted learning rate:
 ![Ramdom](http://i.imgur.com/VNP3V3T.png)
