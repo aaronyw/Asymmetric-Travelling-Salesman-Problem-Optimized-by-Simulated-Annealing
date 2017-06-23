@@ -28,9 +28,9 @@ edge m is from *Um* to *Vm* weighted *Wm*
 
 Check the example file: case_101.txt
 
+---
 ### Testing Examples
 
----
 1. TSPLIB input example:
 
 ```
@@ -55,6 +55,7 @@ Check ATSP_sol_101.txt for the best results I get so far.
 
 ![101](http://i.imgur.com/qRFqjAV.png)
 
+---
 ## Adjusting the parameters
 
 Please refer to the comments of atsp.py for the details of the each parameter.
