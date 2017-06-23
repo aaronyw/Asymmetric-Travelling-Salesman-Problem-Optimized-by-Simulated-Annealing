@@ -10,39 +10,48 @@ There are 2 types of data format:
 1. full distance matrix as in TSPLIB - 
 [check here for details about TSPLIB](http://elib.zib.de/pub/mp-testdata/tsp/tsplib/tsplib.html)
 
-⋅⋅⋅Please note only ATSP type of TSPLIB file can be accepted. There is an example in the project file: ft53.atsp
+Please note only ATSP type of TSPLIB file can be accepted. Check the example file: ft53.atsp
 
 2. as an array contains all edge information:
 
-⋅⋅⋅if there is n nodes and m edges in ATSP graph, this array will be 1 + m*3 long started with n like this [n, U1, V1, W1, U2, V2, W2, ..., Um, Vm, Wm]. It represents:
+if there is n nodes and m edges in ATSP graph, this array will be 1 + m*3 long started with n like this [n, U1, V1, W1, U2, V2, W2, ..., Um, Vm, Wm]. It represents:
 
-⋅⋅*edge 1 is from U1 to V1 weighted W1
-⋅⋅*edge 2 is from U2 to V2 weighted W2
-⋅⋅⋅...
-⋅⋅*edge m is from Um to Vm weighted Wm
+```
+edge 1 is from U1 to V1 weighted W1
 
-⋅⋅⋅There is an example in the project file: case_101.txt
+edge 2 is from U2 to V2 weighted W2
+
+...
+
+edge m is from Um to Vm weighted Wm
+```
+
+Check the example file: case_101.txt
 
 ### Testing Examples
 
 ---
 1. TSPLIB input example:
 
-⋅⋅⋅```python tsplib_input.py ft53.atsp```
+```
+python tsplib_input.py ft53.atsp
+```
 
-⋅⋅⋅Check ATSP_sol_ft53.txt for the best results I get so far. According to [TSPLIB](http://elib.zib.de/pub/mp-testdata/tsp/tsplib/sop-sol.html) this is the best known solution.
+Check ATSP_sol_ft53.txt for the best results I get so far. According to [TSPLIB](http://elib.zib.de/pub/mp-testdata/tsp/tsplib/sop-sol.html) this is the best known solution.
 
 ![ft53](http://i.imgur.com/nLlVhPX.png)
 
 2. array input example:
 
-⋅⋅⋅copy all content inside case_101.txt file, than run
+copy all content inside case_101.txt file, than run
 
-⋅⋅⋅```python console_input.py```
+```
+python console_input.py
+```
 
-⋅⋅⋅and paste everything inside the console
+and paste everything inside the console
 
-⋅⋅⋅Check ATSP_sol_101.txt for the best results I get so far.
+Check ATSP_sol_101.txt for the best results I get so far.
 
 ![101](http://i.imgur.com/qRFqjAV.png)
 
