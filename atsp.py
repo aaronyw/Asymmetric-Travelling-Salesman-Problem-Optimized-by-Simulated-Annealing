@@ -126,22 +126,27 @@ class ATSP:
             b_idx = cycle(pivot + 1)
             A = candidate[a_idx]
             B = candidate[b_idx]
-            if self.M[A][B] < self.INF:
-                for _i in _q:
-                    c_idx = cycle(pivot + 1 + _i)
-                    C = candidate[c_idx]
-                    if self.M[C][X] < self.INF:
-                        d_idx = cycle(c_idx + 1)
-                        D = candidate[d_idx]
-                        if self.M[X][D] < self.INF:
-                            part_a = list(candidate[:d_idx])
-                            part_b = list(candidate[d_idx:])
-                            if X in part_a:
-                                part_a.remove(X)
-                            if X in part_b:
-                                part_b.remove(X)
-                            if self.accept(part_a + [X] + part_b):
-                                return X
+            for _i in _q:
+                c_idx = cycle(pivot + _i)
+                C = candidate[c_idx]
+                y_idx = cycle(c_idx + 1)
+                Y = candidate[y_idx]
+                d_idx = cycle(y_idx + 1)
+                D = candidate[d_idx]
+                if self.M[A][B] + self.M[Y][X] + self.M[X][D] < self.INF:
+                    part_a = list(candidate[:d_idx])
+                    part_b = list(candidate[d_idx:])
+                    if X in part_a:
+                        part_a.remove(X)
+                    if X in part_b:
+                        part_b.remove(X)
+                    if self.accept(part_a + [X] + part_b):
+                        return X
+                if c_idx != b_idx and d_idx != a_idx and self.M[A][Y] + self.M[Y][B] + self.M[C][X] + self.M[X][D] < self.INF:
+                    new_c = list(candidate)
+                    new_c[pivot], new_c[y_idx] = new_c[y_idx], new_c[pivot]
+                    if self.accept(new_c):
+                        return Y
 
         node = None
         while self.T > self.T_stopping:
