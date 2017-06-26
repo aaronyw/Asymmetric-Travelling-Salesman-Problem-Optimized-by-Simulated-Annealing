@@ -39,24 +39,20 @@ python tsplib_input.py ft53.atsp
 
 Check ATSP_sol_ft53.txt for the best results I get so far. According to [TSPLIB](http://elib.zib.de/pub/mp-testdata/tsp/tsplib/sop-sol.html) this is the best known solution.
 
-Plotted learning rate (red dot represents a temper):
+Plotted learning curve (a single red dot represents a temper):
 ![ft53](http://i.imgur.com/nLlVhPX.png)
 
 _Please note that since simulated annealing is randomized algorithm each run may have different result and the best known solution is not guaranteed._
 
 2. array input example:
 
-copy all content inside case_101.txt file, than run
-
 ```
-python console_input.py
+python console_input.py case_101.txt
 ```
-
-and paste everything inside the console
 
 Check ATSP_sol_101.txt for the best results I get so far.
 
-Plotted learning rate:
+Plotted learning curve:
 ![101](http://i.imgur.com/qRFqjAV.png)
 
 ---
@@ -64,7 +60,7 @@ Plotted learning rate:
 
 Please refer to the comments of atsp.py for the details of the each parameter.
 
-Note that regularization_boundary parameter (especially the lower boundary) has very big impact on the algorithm behavior. Each data set may require different setting for this parameter and it is strongly recommended that to set learning_plot=True to see the graph to adjust lower boundary.
+Note that regularization_bound parameter (especially the lower bound) has very big impact on the algorithm behavior. Each data set may require different setting for this parameter and it is strongly recommended that to set learning_plot=True to see the graph to adjust lower bound.
 
-This is an example that the lower boundary is set too high that each temper seems random without descending:
+This is an example that the lower bound is set too high that each temper seems random without descending:
 ![Ramdom](http://i.imgur.com/VNP3V3T.png)

@@ -6,7 +6,7 @@ class ATSP:
     '''
     https://github.com/aaronyw/Asymmetric-Travelling-Salesman-Problem-Optimized-by-Simulated-Annealing.git
     '''
-    def __init__(self, data, infinity=0, initial_t=0, rate=0.999, stopping_t=0.0001, initial_fitness=1, iteration_boundary=None, regularization_boundary=None, learning_plot=False):
+    def __init__(self, data, infinity=0, initial_t=0, rate=0.999, stopping_t=0.0001, initial_fitness=1, iteration_bound=None, regularization_bound=None, learning_plot=False):
         '''
         :param data: as full edge distance matrix or single line input (refer to README.md file)
         :param infinity: a large integer number that is larger than the cost of all possible solutions
@@ -14,10 +14,10 @@ class ATSP:
         :param rate: the rate temperature decreases each iteration
         :param stopping_t: the final temperature accepted by algorithm
         :param initial_fitness: increase this number if algorithm failed to descend in early stage
-        :param iteration_boundary: the (minimal, maximum) iteration number accepted by algorithm; higher minimal iteration will increase the chance to find better solution
-        :param regularization_boundary: as (lower_boundary, upper_boundary) to regularize self.regulator
-               - lower_boundary affects how high each Tempering can go; the algorithm might fail to descend if this number is too small or fail to jump out of local minimal if this number is too large
-               - upper_boundary affects how flat the learning line can be; the Temper might lose its magic if this number is too large
+        :param iteration_bound: the (minimal, maximum) iteration number accepted by algorithm; higher minimal iteration will increase the chance to find better solution
+        :param regularization_bound: as (lower_bound, upper_bound) to regularize self.regulator
+               - lower_bound affects how high each Tempering can go; the algorithm might fail to descend if this number is too small or fail to jump out of local minimal if this number is too large
+               - upper_bound affects how flat the learning line can be; the Temper might lose its magic if this number is too large
         :param learning_plot: setting this as True will also output the detail info for each Temper
         '''
         self.INF = 99999 if not infinity else infinity
@@ -38,8 +38,8 @@ class ATSP:
                     self.M[u][v] = weight
         self.T_initial = self.T = math.sqrt(self.n) if not initial_t else initial_t
         self.T_stopping = stopping_t
-        self.regularization_boundary = (0.1, 7) if not regularization_boundary else regularization_boundary
-        self.iteration_boundary = [99999, 9999999] if not iteration_boundary else iteration_boundary
+        self.regularization_bound = (0.1, 7) if not regularization_bound else regularization_bound
+        self.iteration_bound = [1 << 17, 1 << 24] if not iteration_bound else iteration_bound
         self.regulator = 1
         self.fitness = initial_fitness
         self.control = self.fitness + 1
@@ -80,7 +80,7 @@ class ATSP:
 
         return res
 
-    def accept(self, candidate):
+    def accept(self, candidate, random_acceptance=True):
         res = False
         candidate_cost = self.trip_cost(candidate)
         if candidate_cost < self.current_cost:
@@ -90,7 +90,7 @@ class ATSP:
                 self.best_cost = candidate_cost
                 self.best_solution = candidate
                 res = True
-        else:
+        elif random_acceptance:
             if random.random() < math.exp((self.current_cost - candidate_cost)*self.regulator/self.T):  # probability function
                 self.current_cost = candidate_cost
                 self.current_solution = candidate
@@ -113,20 +113,20 @@ class ATSP:
                 return _idx - self.n
 
         def transform(last):
-            _q = list(range(self.n))
-            random.shuffle(_q)
+            _shift = list(range(self.n - 1))
+            random.shuffle(_shift)
             candidate = list(self.current_solution)
-            for _i in _q:
-                if candidate[_i] != last:
+            for _i in _shift:
+                if candidate[_i] not in last:
                     pivot = _i
                     X = candidate[pivot]
-                    _q.remove(pivot)
+                    _shift.remove(pivot)
                     break
             a_idx = cycle(pivot - 1)
             b_idx = cycle(pivot + 1)
             A = candidate[a_idx]
             B = candidate[b_idx]
-            for _i in _q:
+            for _i in _shift:
                 c_idx = cycle(pivot + _i)
                 C = candidate[c_idx]
                 y_idx = cycle(c_idx + 1)
@@ -141,19 +141,22 @@ class ATSP:
                     if X in part_b:
                         part_b.remove(X)
                     if self.accept(part_a + [X] + part_b):
-                        return X
-                if c_idx != b_idx and d_idx != a_idx and self.M[A][Y] + self.M[Y][B] + self.M[C][X] + self.M[X][D] < self.INF:
+                        return [X]
+                if _i and self.M[A][Y] + self.M[Y][B] + self.M[C][X] + self.M[X][D] < self.INF:
                     new_c = list(candidate)
                     new_c[pivot], new_c[y_idx] = new_c[y_idx], new_c[pivot]
                     if self.accept(new_c):
-                        return Y
+                        return [X, Y]
+            self.T *= self.rate
+            self.cost_list.append(self.current_cost)
+            return []
 
-        node = None
+        nodes = []
         while self.T > self.T_stopping:
-            node = transform(node)
-            if node is None:
-                self.T *= self.rate
-                self.cost_list.append(self.current_cost)
+            nodes = transform(nodes)
+            # if not nodes:
+            #     self.T *= self.rate
+            #     self.cost_list.append(self.current_cost)
 
     def solve(self):
         def sort_order(array):
@@ -173,10 +176,10 @@ class ATSP:
         else:
             print(''.join(['FITNESS'] + [' ']*42), 'COST')
         last_best = self.current_cost + 1
-        while self.current_cost < last_best and len(self.cost_list) < self.iteration_boundary[1] and self.fitness > 0:
+        while self.current_cost < last_best and len(self.cost_list) < self.iteration_bound[1] and self.fitness > 0:
             if len(self.cost_list) > 1:
                 self.T = self.T_initial
-                self.regulator = max((self.regulator/(self.control - self.fitness), self.regularization_boundary[0]))
+                self.regulator = max(self.regulator/(self.control - self.fitness), self.regularization_bound[0])
                 if self.detailed_info:
                     print('Temper from', self.current_cost, 'at', len(self.cost_list), '| Fitness:', self.fitness, '/', self.control)
                 else:
@@ -192,20 +195,21 @@ class ATSP:
                 self.control += 1
                 if self.current_cost == self.best_cost:
                     self.fitness += 1
-                    self.control += 1
+                    # self.control += 1
                     # alternative:
-                    # if self.control <= self.fitness:
-                    #     self.control += 1
-                self.regulator = min((self.n/(last_best - self.current_cost), self.regularization_boundary[1]))
-            else:
-                if self.fitness > 0:
-                    self.fitness -= 1
-                    if self.worst_cost > last_worst:
-                        self.fitness += 1
+                    if self.control <= self.fitness:
                         self.control = self.fitness + 1
-                    last_best = self.current_cost + 1
-                elif len(self.cost_list) < self.iteration_boundary[0]:
+                self.regulator = min(self.n/(last_best - self.current_cost), self.regularization_bound[1])
+            else:
+                self.fitness -= 1
+                if self.worst_cost > last_worst:
+                    self.fitness += 1
+                    self.control = self.fitness + 1
+                last_best = self.current_cost + 1
+                if not self.fitness and len(self.cost_list) < self.iteration_bound[0]:
                     self.fitness = 3
+                    if self.control <= 3:
+                        self.control = 4
         if self.best_cost > self.INF:
             return sort_order(self.best_solution), 0  # indication that there might be NO solution for the problem
         if self.detailed_info:
@@ -223,10 +227,7 @@ class ATSP:
         plt.show()
 
 
-def tsplib(filename, r=None, learning_plot=False):
-    with open(filename, 'r') as fp:
-        content = fp.read().split()
-
+def tsplib(content, f=1, r=None, learning_plot=False):
     idx = content.index('DIMENSION:') + 1
     n = int(content[idx])
     idx = content.index('EDGE_WEIGHT_FORMAT:') + 1
@@ -242,7 +243,7 @@ def tsplib(filename, r=None, learning_plot=False):
             return ([], 0), 'TSPLIB FILE DOES NOT HAVE FULL_MATRIX'
         idx += n
 
-    _atsp = ATSP(data, infinity=inf, regularization_boundary=r, learning_plot=learning_plot)
+    _atsp = ATSP(data, initial_fitness=f, infinity=inf, regularization_bound=r, learning_plot=learning_plot)
     res = _atsp.solve()
     if res[1]:
         return res, 'OPTIMIZED SUCCESSFULLY'
