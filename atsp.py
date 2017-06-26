@@ -147,8 +147,7 @@ class ATSP:
                     new_c[pivot], new_c[y_idx] = new_c[y_idx], new_c[pivot]
                     if self.accept(new_c):
                         return [X, Y]
-            self.T *= self.rate
-            self.cost_list.append(self.current_cost)
+
             return []
 
         nodes = []
@@ -176,7 +175,7 @@ class ATSP:
         else:
             print(''.join(['FITNESS'] + [' ']*42), 'COST')
         last_best = self.current_cost + 1
-        while self.current_cost < last_best and len(self.cost_list) < self.iteration_bound[1] and self.fitness > 0:
+        while self.current_cost < last_best and len(self.cost_list) < self.iteration_bound[1] and self.fitness >= 0:
             if len(self.cost_list) > 1:
                 self.T = self.T_initial
                 self.regulator = max(self.regulator/(self.control - self.fitness), self.regularization_bound[0])
