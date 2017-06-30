@@ -1,16 +1,16 @@
 # Asymmetric Travelling Salesman Problem Optimized by Simulated Annealing
 **A python implementation for simulated annealing algorithm to optimize ATSP (Asymmetric Travelling Salesman Problem)**
 
-Asymmetric TSP is a type of TSP that is on a directed graph which means paths may not exist in both directions between nodes or the distances might be different. Based on simulated annealing, this algorithm uses specific neighbouring candidate generation function designed for ATSP and is able to output a good enough result in a reasonable time.
+Asymmetric TSP is a type of TSP that is on a directed graph which means paths may not exist in both directions between nodes or the distances might be different. Based on simulated annealing, this algorithm uses specific neighbouring candidate generation function designed for ATSP and is able to output a very good result in a reasonable time.
 
 ---
 ### Data preparation
-There are 2 types of data format:
+There are 2 types of accepted data format:
 
 1. full distance matrix as in TSPLIB - 
 [check here for details about TSPLIB](http://elib.zib.de/pub/mp-testdata/tsp/tsplib/tsplib.html)
 
-Please note only ATSP type of TSPLIB file can be accepted. Check the example file: ft53.atsp
+Please note only ATSP type of TSPLIB95 file can be accepted. Check the example file: ft53.atsp
 
 2. as an array contains all edge information:
 
@@ -42,7 +42,11 @@ Check ATSP_sol_ft53.txt for the best results I get so far. According to [TSPLIB]
 Plotted learning curve (a single red dot represents a temper):
 ![ft53](http://i.imgur.com/nLlVhPX.png)
 
-_Please note that since simulated annealing is randomized algorithm each run may have different result and the best known solution is not guaranteed._
+Please note that since simulated annealing is randomized algorithm each run may have different result and the best known solution is not guaranteed. Multi-threading version can normally find better solution:
+
+```
+python tsplib_multiprocess.py ft53.atsp
+```
 
 2. array input example:
 
@@ -50,10 +54,18 @@ _Please note that since simulated annealing is randomized algorithm each run may
 python console_input.py case_101.txt
 ```
 
-Check ATSP_sol_101.txt for the best results I get so far.
+Check ATSP_sol_101.txt as an sample results.
 
 Plotted learning curve:
 ![101](http://i.imgur.com/qRFqjAV.png)
+
+The best solution (4766) I get is from multi-threading version: 0 4 45 53 66 2 1 42 43 3 75 76 37 7 35 51 86 97 49 95 88 54 36 31 8 40 39 15 57 17 55 77 19 67 73 72 68 65 22 48 29 100 9 74 44 28 23 47 63 96 87 89 98 50 32 13 12 33 21 20 34 83 91 84 79 94 14 82 11 81 46 90 10 27 16 41 24 18 80 56 25 61 62 59 78 60 85 58 30 71 64 69 52 93 6 92 99 5 38 70 26 0
+
+Try it yourself:
+
+```
+python console_multiprocess.py case_101.txt
+```
 
 ---
 ## Adjusting the parameters

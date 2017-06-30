@@ -2,11 +2,11 @@ import math, random, matplotlib.pyplot as plt
 from heapq import heappush, heappop
 
 
-class ATSP:
+class SA:
     '''
     https://github.com/aaronyw/Asymmetric-Travelling-Salesman-Problem-Optimized-by-Simulated-Annealing.git
     '''
-    def __init__(self, data, infinity=0, initial_t=0, rate=0.999, stopping_t=0.0001, initial_fitness=1, iteration_bound=None, regularization_bound=None, learning_plot=False):
+    def __init__(self, data, infinity=0, initial_t=0, rate=0.999, stopping_t=0.0001, initial_fitness=1, iteration_bound=None, regularization_bound=None, learning_plot=False, silent_mode=False):
         '''
         :param data: as full edge distance matrix or single line input (refer to README.md file)
         :param infinity: a large integer number that is larger than the cost of all possible solutions
@@ -19,6 +19,7 @@ class ATSP:
                - lower_bound affects how high each Tempering can go; the algorithm might fail to descend if this number is too small or fail to jump out of local minimal if this number is too large
                - upper_bound affects how flat the learning line can be; the Temper might lose its magic if this number is too large
         :param learning_plot: setting this as True will also output the detail info for each Temper
+        :param silent_mode: setting this as True will only output one dot '.' when finished; used in multi-threading mode
         '''
         self.INF = 99999 if not infinity else infinity
         self.rate = rate
@@ -52,6 +53,7 @@ class ATSP:
         self.reheat_x = []
         self.reheat_y = []
         self.detailed_info = learning_plot
+        self.silent_mode = silent_mode
 
     def trip_cost(self, candidate):
         array = candidate + [candidate[0]]
@@ -170,20 +172,22 @@ class ATSP:
             space_n = 50 - bar_n
             print(''.join(bar*bar_n + space*space_n) + '%s' % number, flush=True, end='')
 
-        if self.detailed_info:
-            print('Initialized: ', self.best_cost, '| Fitness:', self.fitness, '/', self.control)
-        else:
-            print(''.join(['FITNESS'] + [' ']*42), 'COST')
+        if not self.silent_mode:
+            if self.detailed_info:
+                print('Initialized: ', self.best_cost, '| Fitness:', self.fitness, '/', self.control)
+            else:
+                print(''.join(['FITNESS'] + [' ']*42), 'COST')
         last_best = self.current_cost + 1
         while self.current_cost < last_best and len(self.cost_list) < self.iteration_bound[1] and self.fitness >= 0:
             if len(self.cost_list) > 1:
                 self.T = self.T_initial
                 self.regulator = max(self.regulator/(self.control - self.fitness), self.regularization_bound[0])
-                if self.detailed_info:
-                    print('Temper from', self.current_cost, 'at', len(self.cost_list), '| Fitness:', self.fitness, '/', self.control)
-                else:
-                    display(self.fitness/self.control, self.current_cost)
-                # print(self.normalization)
+                if not self.silent_mode:
+                    if self.detailed_info:
+                        print('Temper from', self.current_cost, 'at', len(self.cost_list), '| Fitness:', self.fitness, '/', self.control)
+                    else:
+                        display(self.fitness/self.control, self.current_cost)
+                    # print(self.normalization)
                 self.reheat_x.append(len(self.cost_list))
                 self.reheat_y.append(self.current_cost)
             last_best = self.current_cost
@@ -214,7 +218,10 @@ class ATSP:
         if self.detailed_info:
             self.plot_learning()
         else:
-            print()
+            if self.silent_mode:
+                print('.', end='')
+            else:
+                print()
         return sort_order(self.best_solution), self.best_cost
 
     def plot_learning(self):
@@ -224,27 +231,3 @@ class ATSP:
         plt.ylabel('Trip Cost')
         plt.xlabel('Iteration')
         plt.show()
-
-
-def tsplib(content, f=1, r=None, learning_plot=False):
-    idx = content.index('DIMENSION:') + 1
-    n = int(content[idx])
-    idx = content.index('EDGE_WEIGHT_FORMAT:') + 1
-    if content[idx] != 'FULL_MATRIX':
-        return ([], 0), 'ONLY ATSP WITH FULL_MATRIX IS ACCEPTED'
-    idx = content.index('EDGE_WEIGHT_SECTION') + 1
-    inf = int(content[idx])
-    data = []
-    for i in range(n):
-        if len(content) > idx + n:
-            data.append(list(map(int, content[idx:idx + n])))
-        else:
-            return ([], 0), 'TSPLIB FILE DOES NOT HAVE FULL_MATRIX'
-        idx += n
-
-    _atsp = ATSP(data, initial_fitness=f, infinity=inf, regularization_bound=r, learning_plot=learning_plot)
-    res = _atsp.solve()
-    if res[1]:
-        return res, 'OPTIMIZED SUCCESSFULLY'
-    else:
-        return res, 'NO SOLUTION'
