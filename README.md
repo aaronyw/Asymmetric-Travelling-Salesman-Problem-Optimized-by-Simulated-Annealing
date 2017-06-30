@@ -74,5 +74,5 @@ Please refer to the comments of atsp.py for the details of the each parameter.
 
 Note that regularization_bound parameter (especially the lower bound) has very big impact on the algorithm behavior. Each data set may require different setting for this parameter and it is strongly recommended that to set learning_plot=True to see the graph to adjust lower bound.
 
-This is an example that the lower bound is set too high that each temper seems random without descending:
+This is an example that the lower bound is set too low that each temper seems random without descending:
 ![Ramdom](http://i.imgur.com/VNP3V3T.png)
