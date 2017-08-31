@@ -51,7 +51,7 @@ python tsplib_multiprocess.py ft53.atsp
 2. array input example:
 
 ```
-python console_input.py case_101.txt
+python array_input.py case_101.txt
 ```
 
 Check ATSP_sol_101.txt as an sample results.
@@ -64,7 +64,7 @@ The best solution (4756) I get is from multi-threading version: 0 4 45 53 66 2 1
 Try it yourself:
 
 ```
-python console_multiprocess.py case_101.txt
+python array_multiprocess.py case_101.txt
 ```
 
 ---
