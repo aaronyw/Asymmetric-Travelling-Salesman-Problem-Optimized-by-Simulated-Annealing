@@ -17,12 +17,10 @@ Please note only ATSP type of TSPLIB95 file can be accepted. Check the example f
 if there is n nodes and m edges in ATSP graph, this array will be 1 + m*3 long started with n like this **_[n, U1, V1, W1, U2, V2, W2, ..., Um, Vm, Wm]_** which represents:
 
 ```
+total nodes number n
 edge 1 is from U1 to V1 weighted W1
-
 edge 2 is from U2 to V2 weighted W2
-
 ...
-
 edge m is from Um to Vm weighted Wm
 ```
 
@@ -59,7 +57,7 @@ Check ATSP_sol_101.txt as an sample results.
 Plotted learning curve:
 ![101](http://i.imgur.com/qRFqjAV.png)
 
-The best solution (4756) I get is from multi-threading version: 0 4 45 53 66 2 1 42 43 3 75 76 37 7 35 51 86 97 49 95 88 54 36 31 8 41 17 55 77 78 62 59 22 48 29 100 9 74 44 28 23 47 63 96 87 89 98 50 32 13 12 33 21 20 34 83 93 6 92 99 91 84 79 94 14 82 16 11 81 46 90 10 27 57 40 39 15 24 18 80 56 25 61 19 67 73 72 85 60 58 30 71 64 68 65 69 52 26 5 38 70 0
+The best solution (4756) I got is from multi-threading version: 0 4 45 53 66 2 1 42 43 3 75 76 37 7 35 51 86 97 49 95 88 54 36 31 8 41 17 55 77 78 62 59 22 48 29 100 9 74 44 28 23 47 63 96 87 89 98 50 32 13 12 33 21 20 34 83 93 6 92 99 91 84 79 94 14 82 16 11 81 46 90 10 27 57 40 39 15 24 18 80 56 25 61 19 67 73 72 85 60 58 30 71 64 68 65 69 52 26 5 38 70 0
 
 Try it yourself:
 
