@@ -4,7 +4,8 @@ import atsp, sys
 if len(sys.argv) == 2:
     with open(sys.argv[1], 'r') as fp:
         content = fp.read().split()
-        atsp = atsp.SA(list(map(int, content)), regularization_bound=(0.3, 3), learning_plot=True)
+        print(content)
+        atsp = atsp.SA(list(map(int, content)), learning_plot=True)
         res = atsp.solve()
         if res[1]:
             print('OPTIMIZED COST:', res[1])

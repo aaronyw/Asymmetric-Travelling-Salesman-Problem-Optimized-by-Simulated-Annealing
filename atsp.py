@@ -1,4 +1,4 @@
-import math, random, matplotlib.pyplot as plt
+import math, random, time, matplotlib.pyplot as plt
 from heapq import heappush, heappop
 
 
@@ -6,7 +6,7 @@ class SA:
     '''
     https://github.com/aaronyw/Asymmetric-Travelling-Salesman-Problem-Optimized-by-Simulated-Annealing.git
     '''
-    def __init__(self, data, infinity=0, initial_t=0, rate=0.999, stopping_t=0.0001, initial_fitness=1, iteration_bound=None, regularization_bound=None, learning_plot=False, silent_mode=False):
+    def __init__(self, data, infinity=1<<17, initial_t=0, rate=0.999, stopping_t=0.0001, initial_fitness=1, initial_solution=None, iteration_bound=[1 << 17, 1 << 24], regularization_bound=(0.3, 3), learning_plot=False, silent_mode=False):
         '''
         :param data: as full edge distance matrix or single line input (refer to README.md file)
         :param infinity: a large integer number that is larger than the cost of all possible solutions
@@ -21,7 +21,7 @@ class SA:
         :param learning_plot: setting this as True will also output the detail info for each Temper
         :param silent_mode: setting this as True will only output one dot '.' when finished; used in multi-threading mode
         '''
-        self.INF = 99999 if not infinity else infinity
+        self.INF = infinity
         self.rate = rate
         if isinstance(data[0], list):
             self.n = len(data)
@@ -37,18 +37,20 @@ class SA:
                 weight = data.pop(0)
                 if u != v:
                     self.M[u][v] = weight
-        self.T_initial = self.T = math.sqrt(self.n) if not initial_t else initial_t
+        self.T_initial = self.T = initial_t if initial_t else math.sqrt(self.n)
         self.T_stopping = stopping_t
-        self.regularization_bound = (0.1, 7) if not regularization_bound else regularization_bound
-        self.iteration_bound = [1 << 17, 1 << 24] if not iteration_bound else iteration_bound
+        self.regularization_bound = regularization_bound
+        self.iteration_bound = iteration_bound
         self.regulator = 1
         self.fitness = initial_fitness
         self.control = self.fitness + 1
-        self.current_solution = self.initialization()
-        self.current_cost = self.trip_cost(self.current_solution)
-        self.initial_cost = self.current_cost
+        if initial_solution:
+            initial_solution = initial_solution[:-1] if initial_solution[0] == initial_solution[-1] else initial_solution
+            self.current_solution = initial_solution if len(initial_solution) == self.n else self.initialization()            
+        else:
+            self.current_solution = self.initialization()
         self.best_solution = list(self.current_solution)
-        self.best_cost = self.worst_cost = self.current_cost
+        self.initial_cost, self.best_cost, self.worst_cost, self.current_cost = [self.trip_cost(self.current_solution)]*4
         self.cost_list = [self.current_cost]
         self.reheat_x = []
         self.reheat_y = []
@@ -57,10 +59,8 @@ class SA:
 
     def trip_cost(self, candidate):
         array = candidate + [candidate[0]]
-        res = 0
-        for u, v in zip(array[:-1], array[1:]):
-            res += self.M[u][v]
-        return res
+        res = [self.M[u][v] for u, v in zip(array[:-1], array[1:])]
+        return sum(res)
 
     def initialization(self):
         node = 0
@@ -93,6 +93,7 @@ class SA:
                 self.best_solution = candidate
                 res = True
         elif random_acceptance:
+            random.seed(time.time())
             if random.random() < math.exp((self.current_cost - candidate_cost)*self.regulator/self.T):  # probability function
                 self.current_cost = candidate_cost
                 self.current_solution = candidate
@@ -219,7 +220,7 @@ class SA:
             self.plot_learning()
         else:
             if self.silent_mode:
-                print('.', end='')
+                print(str(self.best_cost) + '.', end='')
             else:
                 print()
         return sort_order(self.best_solution), self.best_cost

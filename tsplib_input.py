@@ -1,7 +1,7 @@
 import sys, atsp
 
 
-def tsplib(content, f=1, r=None, learning_plot=False):
+def tsplib(content, learning_plot=True):
     idx = content.index('DIMENSION:') + 1
     n = int(content[idx])
     idx = content.index('EDGE_WEIGHT_FORMAT:') + 1
@@ -17,13 +17,13 @@ def tsplib(content, f=1, r=None, learning_plot=False):
             return [], 0
         idx += n
 
-    _atsp = atsp.SA(data, initial_fitness=f, infinity=inf, regularization_bound=r, learning_plot=learning_plot)
+    _atsp = atsp.SA(data, learning_plot=learning_plot)
     return _atsp.solve()
 
 
 if len(sys.argv) == 2:
     with open(sys.argv[1], 'r') as fp:
         file_content = fp.read().split()
-        res = tsplib(file_content, learning_plot=True)
-        print(res[1], res[0][1])
-        print(' '.join(map(str, res[0][0])))
+        res = tsplib(file_content)
+        print('OPTIMIZED COST:', res[1])
+        print(' '.join(map(str, res[0])))
