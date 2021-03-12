@@ -2,7 +2,7 @@ import sys, atsp, multiprocessing as mp
 
 #################
 cores = 12  # how many threads you want to use? at least 2 please
-epoch = 100  # at least 1, more epoch takes more time but reaches closer to the best result
+epoch = 50  # at least 1, more epoch takes more time but reaches closer to the best result
 regb = (0.3, 3)  # regularization_bound
 initf = 20  # initial fitness for multiprocessing, more fitness takes more time but reaches closer to the best result
 initc = None  # initial solution in an array format

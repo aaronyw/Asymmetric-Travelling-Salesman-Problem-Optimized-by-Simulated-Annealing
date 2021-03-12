@@ -1,4 +1,4 @@
-import atsp, sys, time, multiprocessing as mp
+import atsp, sys, multiprocessing as mp
 
 #################
 cores = 12  # how many threads you want to use? at least 2 please
@@ -28,7 +28,6 @@ if len(sys.argv) == 2:
         output = mp.Manager().Queue()
         res, processes = ([], float('inf')), []
         addajob(initc, False)
-        time.sleep(1)
         n = 2
         while processes:
             _job = processes.pop(0)
