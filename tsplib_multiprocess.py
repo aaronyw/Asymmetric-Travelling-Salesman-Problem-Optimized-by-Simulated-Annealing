@@ -1,7 +1,7 @@
-import sys, atsp, time, multiprocessing as mp
+import sys, atsp, multiprocessing as mp
 
 #################
-cores = 12  # how many threads you want to use?
+cores = 12  # how many threads you want to use? at least 2 please
 epoch = 100  # at least 1, more epoch takes more time but reaches closer to the best result
 regb = (0.3, 3)  # regularization_bound
 initf = 20  # initial fitness for multiprocessing, more fitness takes more time but reaches closer to the best result
@@ -47,7 +47,7 @@ if len(sys.argv) == 2:
             res, processes = ([], float('inf')), []
             output = mp.Manager().Queue()
             addajob(initc, False)
-            time.sleep(1)
+            n = 2
             while processes:
                 _job = processes.pop(0)
                 _job.join()
@@ -55,8 +55,8 @@ if len(sys.argv) == 2:
                 if _candidate[1] and _candidate[1] < res[1]:
                     res = _candidate
                 if epoch:
-                    for _ in range(cores - len(processes)):
+                    for _ in range(min(n, cores) - len(processes)):
                         addajob(res[0])
-
+                n += 1
             print(' OPTIMIZED COST:', res[1])
             print(' '.join(map(str, res[0])))

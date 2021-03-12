@@ -52,12 +52,7 @@ python tsplib_multiprocess.py ft53.atsp
 python array_input.py case_101.txt
 ```
 
-Check ATSP_sol_101.txt as an sample results.
-
-Plotted learning curve:
-![101](http://i.imgur.com/qRFqjAV.png)
-
-The best solution (4546, updated 12 March 2021) I got is from multi-threading version: 0 4 6 92 93 5 38 70 2 1 42 43 3 79 94 14 82 75 76 37 7 35 49 95 88 54 50 32 13 31 8 40 39 15 57 17 55 77 78 62 59 65 22 48 29 100 9 74 44 28 23 47 63 96 87 89 98 51 86 97 36 12 33 21 20 34 90 46 10 27 11 81 16 41 24 18 80 56 25 61 19 67 73 72 85 60 58 30 71 64 68 69 52 26 99 91 84 83 45 53 66 0
+The best solution (4546, updated 12 March 2021 as shown in ATSP_sol_101.txt) I got is from multi-threading version: 0 4 6 92 93 5 38 70 2 1 42 43 3 79 94 14 82 75 76 37 7 35 49 95 88 54 50 32 13 31 8 40 39 15 57 17 55 77 78 62 59 65 22 48 29 100 9 74 44 28 23 47 63 96 87 89 98 51 86 97 36 12 33 21 20 34 90 46 10 27 11 81 16 41 24 18 80 56 25 61 19 67 73 72 85 60 58 30 71 64 68 69 52 26 99 91 84 83 45 53 66 0
 
 Try it yourself:
 
